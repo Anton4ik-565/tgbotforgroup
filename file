@@ -3,7 +3,7 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.utils import executor
 
 # Замените 'YOUR_API_TOKEN' на ваш токен Telegram
-API_TOKEN = 'YOUR_API_TOKEN'
+API_TOKEN = ('7174354826:AAFO4l8wCSONTjncd8J0tqjiaGJH-I91EAc')
 
 # Список с фактами
 facts = [
@@ -71,18 +71,23 @@ async def send_sapphire_fact(message: types.Message):
     fact = random.choice(facts)
     await message.answer(fact)
 
-target_user_ids = [123456789, 987654321]
-
-# Текст сообщения для отправки
-report_message = "Получен новый репорт. Пожалуйста, проверьте его."
 
 
+
+target_user_ids = [6510736814]
 # Обработчик текстового сообщения "репорт"
 @dp.message_handler(lambda message: message.text.lower() == 'репорт')
 async def report_to_admins(message: types.Message):
-    # Создаем текст сообщения с ссылкой на сообщение
-    reply_message_link = f'<a href="{message.link}">это сообщение</a>'
-    report_text = f"Спасибо за ваш репорт! Это сообщение было отправлено администраторам чата.\n\n{reply_message_link}"
+        # Формируем ссылку на сообщение
+    chat_id = message.chat.id
+    message_id = message.message_id
+    if isinstance(chat_id, int):
+        reply_message_link = f"https://t.me/c/1842762917/{message_id}"
+    else:
+        reply_message_link = f"https://t.me/1842762917/{message_id}"
+
+    # Формируем текст сообщения
+    report_text = f"Спасибо за ваш репорт! Это сообщение было отправлено администраторам чата.\n\nСсылка на сообщение: {reply_message_link}"
 
     # Отправляем определенный текст в ответ на сообщение "репорт"
     await message.answer(report_text, parse_mode='HTML')
@@ -90,6 +95,10 @@ async def report_to_admins(message: types.Message):
     # Отправляем сообщение в личные сообщения указанным пользователям
     for user_id in target_user_ids:
         await bot.send_message(user_id, report_text, parse_mode='HTML')
+
+
+
+
 
 
 # Запуск бота
